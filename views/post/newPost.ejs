@@ -1,0 +1,44 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<link rel = "stylesheet" href = "../../cssFiles/style.css">
+<title>New post</title>
+</head>
+<body>
+    <%- include('../partials/navbar'); %>
+    <div class="pageHeading mb-5">
+        <h1 class = "pageHeadingContent mb-3">New Post</h1>
+        <p>Ask for help from our community members</p>
+    </div>
+
+    <div class="newPostFormContainer mb-5">
+        <div class = "newPostMainContainer">
+            <form action="/post/newPost" method="POST">
+                <div class = "mb-5">
+                    <span class = "newPostSpanLabel">
+                        <label>Post Title</label>
+                    </span>
+                    <span class = "newPostSpanInput">
+                        <input type="text" id = "newPostTitleInput" placeholder="Enter the post title here" name = "title">
+                    </span>
+                </div>
+                <div class = "mb-5">
+                    <span class = "newPostSpanLabel">
+                        <label >Post Description</label>
+                    </span>
+                    <span class = "newPostSpanInput">
+                        <textarea cols="30" rows="10" id = "newPostDescriptionInput" placeholder="Enter the post descrition here" name = "content"></textarea>
+                    </span>
+                </div>
+                <% if(!userDetails){ %>
+                    <div class = "mb-5" id = "loginMessage">Please <a href="/user/login">login</a> to post your query</div>
+                <% } %> 
+                <div>
+                    <button type = "submit" id = "formSubmitButton">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/jsFiles'); %>
+</body>
+</html>

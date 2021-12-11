@@ -1,0 +1,32 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<title>All Posts</title>
+</head>
+<body> 
+    <%- include('../partials/navbar'); %>
+    <div class = "pageHeading mb-4">
+        <h1 class = "pageHeadingContent">All posts</h1>
+        <!-- <p>Implement sort features</p> -->
+    </div>
+    <div class="container">
+        <ul>
+            <% for(let post of posts){ %>
+                <div class = "allPostsBlock mb-5">
+                    <div class = "allPostsContainer">
+                        <div class = "allPostsTitle mb-5"><a href="/post/<%=post._id%>/postDetails"><%=post.title%></a></div>
+                        <div class = "allpostsAutorContainer mb-2">
+                            <span class = "allPostsDate"><i class="bi bi-calendar"></i> <span id = "dateText"><%= post.postingDate%> </span> </span>
+                            <span class = "allPostsAuthor">
+                                <i class="bi bi-person"></i> <a href = "/user/<%=post.author.username%>/userDetails"><%= post.author.name%></a>
+                            </span>
+                            <span class = "allPostsUpvotes"><i class="bi bi-hand-thumbs-up"></i> <%= post.upvotes.length%></span>
+                        </div>
+                    </div>
+                </div>
+            <% } %> 
+        </ul>
+    </div>
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/jsFiles'); %>
+</body>
+</html>

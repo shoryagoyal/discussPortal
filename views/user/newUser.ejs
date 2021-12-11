@@ -1,0 +1,47 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<title>New user</title>
+</head>
+<body>
+    <%-include('../partials/navbar'); %>
+    <div id = "formBorder">
+      <div class = "formHeading mb-3">
+            <h1>Sign up</h1>
+      </div>
+      <div class = "signUpLink">
+         <p>Existing User? <a href="/user/login">Log in</a> </p>
+      </div>
+      <hr>
+      <form action = "/user/newUser" method = "POST" class = "formTag">
+          <div class = "mb-4">
+              <span class = "formIcon">
+                <i class="bi bi-card-text"></i>
+              </span>
+              <span class = "inputSpan">
+                  <input type = "text" class = "formInput" placeholder="Full name" name = "name" required> 
+              </span>
+          </div>
+          <div class = "mb-4">
+               <span class = "formIcon">
+                   <i class="bi bi-person-circle"></i>
+               </span>
+               <span class = "inputSpan">
+                   <input type = "text" class = "formInput" placeholder = "username" name = "username" required>
+               </span>
+          </div>
+          <div class = "mb-5">
+               <span class = "formIcon">
+                   <i class="bi bi-lock-fill"></i>
+               </span>
+               <span class = "inputSpan">
+                   <input type = "password" class = "formInput" placeholder="Password" name = "password" required> 
+               </span>
+          </div>
+          <div>
+               <button type = "submit" id = "formSubmitButton">Sign up</button>
+           </div>
+      </form>
+   </div>
+   <%- include('../partials/footer'); %>
+   <%- include('../partials/jsFiles'); %>
+</body>

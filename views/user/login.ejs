@@ -1,0 +1,42 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<title>Login Page</title>
+</head>
+<body>
+    <%-include('../partials/navbar'); %>
+    <div id = "formBorder">
+       <div class = "formHeading mb-3">
+             <h1>Log in</h1>
+       </div>
+       <div class = "signUpLink">
+          <p>New User? <a href="/user/newUser">Sign up</a> </p>
+       </div>
+       <hr>
+       <form action = "/user/login" method="POST" class = "formTag">
+            <div class = "mb-4">
+                <span class = "formIcon">
+                    <i class="bi bi-person-circle"></i>
+                </span>
+                <span class = "inputSpan">
+                    <input type = "text" class = "formInput" placeholder = "username" name = "username" required>
+                </span>
+            </div>
+            <div class = "mb-5">
+                <span class = "formIcon">
+                    <i class="bi bi-lock-fill"></i>
+                </span>
+                <span class = "inputSpan">
+                    <input type = "password" class = "formInput" placeholder="Password" name = "password" required> 
+                </span>
+            </div>
+            <% if(errorMessage){ %>
+                <div class = "mb-5" id  ="errorMessage">Invalid username or password</div> 
+            <% } %> 
+            <div>
+                <button type = "submit" id = "formSubmitButton">Log in</button>
+            </div>
+       </form>
+    </div>
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/jsFiles'); %>
+</body>

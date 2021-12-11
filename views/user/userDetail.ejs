@@ -1,0 +1,44 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<title>user details</title>
+</head>
+<body>
+    <%-include('../partials/navbar'); %>
+    <div class = "pageHeading mb-3">
+        <h1 class = "mb-4"><%=user.name%> Details</h1>
+        <div>
+            <span class = "userDetailHeader">Total Post Created :- <%=user.postsCreated.length%></span>
+            <span class = "userDetailHeader">Likes recieved :- <%=totalLikes%></span>
+        </div>
+    </div>
+    <div class = "userDetailsRecentPostHeading">
+        <h2>Recent Posts by <%=user.name%></h2>
+    </div>
+    <div class = "tableContainer">
+        <% if(user.postsCreated.length===0){ %>
+            <div>No post created by user</div>
+        <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Post title</th>
+                        <th>Posting Date</th>
+                        <th>Likes on post</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let post of user.postsCreated) { %>
+                        <tr>
+                            <td><a href = "/post/<%=post._id%>/postDetails"><%=post.title%></a></td>
+                            <td><%=post.postingDate%></td>
+                            <td><%=post.upvotes.length%></td>
+                        </tr>
+                    <% } %> 
+                </tbody>
+            </table>
+        <% } %>  
+    </div>
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/jsFiles'); %>
+</body>
+</html>

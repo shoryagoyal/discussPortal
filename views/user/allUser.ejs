@@ -1,0 +1,16 @@
+<%- include('../partials/mainHtmlPart1'); %>
+<!-- include your title and css files -->
+<title>Al users</title>
+</head>
+<body>
+    <%- include('../partials/navbar'); %>
+    <h1>All users</h1>
+    <ul>
+        <% for(let user of users){ %>
+            <li><a href = "/user/<%=user.username%>/userDetails"><%= user.name %></a></li> 
+        <% } %> 
+    </ul>
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/jsFiles'); %>
+</body>
+</html>
