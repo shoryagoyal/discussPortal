@@ -261,6 +261,6 @@ app.post('/comment/:postId/newComment',async (req,res)=>{
     }
 });
 
-app.listen(PORT,()=>{
+app.listen(port,()=>{
     console.log("connected to the server");
 });
