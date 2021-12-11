@@ -22,6 +22,8 @@ const methodOverride = require('method-override');
 const { Console } = require('console');
 const app = express();
 const dbUrl = process.env.DB_URL;  // 'mongodb://localhost:27017/discussPortal'
+const port = process.env.PORT || 3000;
+
 let errorMessage = false;
 
 function getCurrentDate(){
@@ -259,6 +261,6 @@ app.post('/comment/:postId/newComment',async (req,res)=>{
     }
 });
 
-app.listen('3000',()=>{
+app.listen(PORT,()=>{
     console.log("connected to the server");
 });
