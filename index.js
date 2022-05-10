@@ -21,7 +21,7 @@ const expressSession = require('express-session');
 const methodOverride = require('method-override');
 const { Console } = require('console');
 const app = express();
-const dbUrl = process.env.DB_URL;// 'mongodb://localhost:27017/discussPortal' //process.env.DB_URL;
+const dbUrl = 'mongodb://localhost:27017/discussPortal'; //process.env.DB_URL;
 const port = process.env.PORT || 3000;
 
 let errorMessage = false;
@@ -143,6 +143,10 @@ app.get('/post/allPosts',async (req,res) => {
 
 app.get('/post/:postId/postDetails',async (req,res) => {
     const {postId} = req.params; 
+    const {userId} = req.session;
+    const user = await User.findById(userId);
+    let isBookmarked = false; 
+    if(user) isBookmarked = (user.bookmarkedPost.indexOf(postId) === -1)?false:true;
     /* Nested population example */
     const post = await Post.findById(postId).populate('author').populate({
         path:'comments', 
@@ -150,7 +154,7 @@ app.get('/post/:postId/postDetails',async (req,res) => {
             path:'author',
         }
     })
-    res.render('post/postDetail',{post});
+    res.render('post/postDetail',{post, isBookmarked});
 }); 
 
 app.get('/post/newPost',(req,res)=>{
@@ -212,11 +216,30 @@ app.post('/post/:postId/postDetails/downvote',async (req,res) => {
             }
             post.downvotes.push(userId);
             await post.save();
-            // res.send("will downvotee "+post);
             res.redirect(`/post/${postId}/postDetails`);
         }
     }
-});  
+});   
+
+app.post('/post/:postId/bookmark', async (req, res) => {
+    console.log("hitted the route successfully");
+    const {postId} = req.params;
+    if(!req.session.userId) res.redirect('/user/login');
+    else {
+        const {userId} = req.session; 
+        const user = await User.findById(userId);
+        if(!user) res.send("No such user exist");
+        else {
+            if(user.bookmarkedPost.indexOf(postId) !== -1) res.send("already bookmarked why bookmark it again"); 
+            else {
+                user.bookmarkedPost.push(postId); 
+                console.log(user); 
+                await user.save();
+                res.redirect(`/post/${postId}/postDetails`);
+            } 
+        }
+    }
+});
 
 app.get('/post/:postId/edit',async (req,res) => {
     const post = await Post.findById(req.params.postId);
