@@ -1,29 +1,48 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/home">Discuss Portal</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/post/allPosts">Recent Posts</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/post/newPost">Create Post</a>
-        </li>
-      </ul>
-      <div class = "ml-auto">
-        <% if(!userId){ %> 
-          <a href = "/user/login" class = "btn btn-success navButtons">Login</a>
-          <a href = "/user/newUser" class = "btn btn-warning navButtons">Sign up</a>
-        <% } else{ %>
-          <form action="/user/logout" method="POST">
-            <button type = "submit" class = "btn btn-danger navButtons">Logout</button>
-          </form>
-        <% } %> 
+<style>
+  html, body {
+    margin:0;
+    padding:0;
+    height:100%;
+  }
+  #container {
+    min-height:100%;
+    position:relative;
+  }
+  #body {
+   padding-bottom:200px;   /* Height of the footer */
+  }
+  
+</style>
+<div id = "container">
+  <div id = "header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/home">Discuss Portal</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/post/allPosts">Recent Posts</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/post/newPost">Create Post</a>
+          </li>
+        </ul>
+        <div class = "ml-auto">
+          <% if(!userId){ %> 
+            <a href = "/user/login" class = "btn btn-success navButtons">Login</a>
+            <a href = "/user/newUser" class = "btn btn-warning navButtons">Sign up</a>
+          <% } else{ %>
+            <form action="/user/logout" method="POST">
+              <button type = "submit" class = "btn btn-danger navButtons">Logout</button>
+            </form>
+          <% } %> 
+        </div>
       </div>
-    </div>
-  </nav> 
+    </nav> 
+  </div>
+  <div id = "body">
