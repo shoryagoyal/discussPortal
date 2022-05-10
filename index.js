@@ -21,7 +21,7 @@ const expressSession = require('express-session');
 const methodOverride = require('method-override');
 const { Console } = require('console');
 const app = express();
-const dbUrl = process.env.DB_URL;  // 'mongodb://localhost:27017/discussPortal'
+const dbUrl =  'mongodb://localhost:27017/discussPortal' //process.env.DB_URL;
 const port = process.env.PORT || 3000;
 
 let errorMessage = false;
@@ -59,7 +59,7 @@ app.use(expressSession({
   }));
 
 app.use((req,res,next) => {
-    res.locals.userDetails = req.session.userDetails;   
+    res.locals.userId = req.session.userId;   
     errorMessage = false;
     next();
 });
@@ -101,13 +101,13 @@ app.post('/user/newUser',async (req,res) => {
         username: username,
     }); 
     await newUser.save();
-    req.session.userDetails = newUser._id; 
-    res.locals.userDetails = newUser._id; 
+    req.session.userId = newUser._id; 
+    res.locals.userId = newUser._id; 
     res.redirect(`/user/${newUser.username}/userDetails`);
 });
 
 app.get('/user/login',(req,res) => {
-    if(req.session.userDetails) res.redirect('/home');
+    if(req.session.userId) res.redirect('/home');
     else res.render('user/login',{errorMessage});
 }); 
 
@@ -124,8 +124,8 @@ app.post('/user/login',async (req,res) => {
         if(!compare) res.send("enter valid name or password");
         else{
             console.log(user);
-            req.session.userDetails = user._id; 
-            res.locals.userDetails = user._id;
+            req.session.userId = user._id; 
+            res.locals.userId = user._id;
             res.redirect(`/user/${user.username}/userDetails`);
         }
     }
@@ -158,16 +158,16 @@ app.get('/post/newPost',(req,res)=>{
 });
 
 app.post('/post/newPost',async (req,res) => {
-    if(!req.session.userDetails) res.redirect('/user/login');
+    if(!req.session.userId) res.redirect('/user/login');
     else{
         const {content,title} = req.body; 
-        const {userDetails} = req.session;
-        const user = await User.findById(userDetails);
+        const {userId} = req.session;
+        const user = await User.findById(userId);
         const date = "Posted on "+getCurrentDate();
         const newPost = new Post({
             title: title,
             content: content, 
-            author :userDetails, 
+            author : userId, 
             postingDate: date,
         }); 
         user.postsCreated.push(newPost._id);
@@ -180,16 +180,16 @@ app.post('/post/newPost',async (req,res) => {
 app.post('/post/:postId/postDetails/upvote',async (req,res) => {
     const {postId} = req.params;
     const post = await Post.findById(postId);
-    if(!req.session.userDetails) res.redirect(`/user/login`);
+    if(!req.session.userId) res.redirect(`/user/login`);
     else{
-        const {userDetails} = req.session;
-        if(post.upvotes.includes(userDetails._id)) res.send("already upvoted");
+        const {userId} = req.session;
+        if(post.upvotes.indexOf(userId) !== -1) res.send("already upvoted");
         else{
-            if(post.downvotes.includes(userDetails._id)){
-                const index = post.downvotes.indexOf(userDetails._id);
+            if(post.downvotes.indexOf(userId) !== -1){
+                const index = post.downvotes.indexOf(userId);
                 post.downvotes.splice(index,1);
             }
-            post.upvotes.push(userDetails._id);
+            post.upvotes.push(userId);
             const postCreator = await User.findById(post.author);
             await post.save();
             await postCreator.save();
@@ -201,16 +201,16 @@ app.post('/post/:postId/postDetails/upvote',async (req,res) => {
 app.post('/post/:postId/postDetails/downvote',async (req,res) => {
     const {postId} = req.params;
     const post = await Post.findById(postId);
-    if(!req.session.userDetails) res.redirect(`/user/login`);
+    if(!req.session.userId) res.redirect(`/user/login`);
     else{
-        const {userDetails} = req.session;
-        if(post.downvotes.includes(userDetails._id)) res.send("already downvoted");
+        const {userId} = req.session;
+        if(post.downvotes.indexOf(userId) !== -1) res.send("already downvoted");
         else{
-            if(post.upvotes.includes(userDetails._id)){
-                const index = post.upvotes.indexOf(userDetails._id);
+            if(post.upvotes.indexOf(userId) !== -1){
+                const index = post.upvotes.indexOf(userId);
                 post.upvotes.splice(index,1);
             }
-            post.downvotes.push(userDetails._id);
+            post.downvotes.push(userId);
             await post.save();
             // res.send("will downvotee "+post);
             res.redirect(`/post/${postId}/postDetails`);
@@ -224,7 +224,7 @@ app.get('/post/:postId/edit',async (req,res) => {
 }); 
 
 app.put('/post/:postId/edit',async (req,res) => {
-    if(!req.session.userDetails) res.render('/user/login');
+    if(!req.session.userId) res.render('/user/login');
     else{
         const {title,content} = req.body; 
         const {postId} = req.params;
@@ -239,11 +239,11 @@ app.put('/post/:postId/edit',async (req,res) => {
 
 
 app.post('/comment/:postId/newComment',async (req,res)=>{
-    if(!req.session.userDetails) res.redirect('/user/login');
+    if(!req.session.userId) res.redirect('/user/login');
     else{
         const {postId} = req.params; 
-        const {userDetails} = req.session;
-        const user = await User.findById(userDetails);
+        const {userId} = req.session;
+        const user = await User.findById(userId);
         const post = await Post.findById(postId);
         const content = req.body.commentContent;
         const date = "Answered on "+getCurrentDate();

@@ -38,7 +38,7 @@
         </div>
 
 
-        <% if(userDetails && post.author._id==userDetails){ %>
+        <% if(userId && post.author._id == userId){ %>
             <div class = "row">
                 <div class = "col-sm-6 d-flex justify-content-center">
                     <a href = "/post/<%=post._id%>/edit" class = "btn btn-primary">Edit Post</a>
@@ -69,7 +69,7 @@
             <div class = "form-group">
                 <textarea name="commentContent" class = "form-control"  cols="15" rows="5" placeholder="Write your answer here" required></textarea>
             </div>
-            <% if(!userDetails) { %>
+            <% if(!userId) { %>
                 <div id = "loginMessage" class = "mb-3">Please <a href="/user/login">Login</a> to answer the question</div>
             <% } %> 
             <button type = "submit" class = "btn btn-warning mb-4">Post</button>
