@@ -1,9 +1,4 @@
 // Mongo db start command :- "C:\Program Files\MongoDB\Server\5.0\bin\mongo.exe"
-// snakdown :- https://snackdown.codechef.com/registration?ref=shoryagoyal18
-
-// TODO: Implement bookmark feature 
-
-// ! There is a error in user total like count
 
 if(process.env.NODE_ENV !== "production"){
     require('dotenv').config();
@@ -21,7 +16,7 @@ const expressSession = require('express-session');
 const methodOverride = require('method-override');
 const { Console } = require('console');
 const app = express();
-const dbUrl = process.env.DB_URL;//'mongodb://localhost:27017/discussPortal'; //process.env.DB_URL;
+const dbUrl = 'mongodb://localhost:27017/discussPortal'; //process.env.DB_URL;
 const port = process.env.PORT || 3000;
 
 let errorMessage = false;
@@ -33,6 +28,24 @@ function getCurrentDate(){
         const year = currentDate.getFullYear();
         const monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return day+" "+monthArray[month]+" "+year;
+} 
+
+function validUsername(username) {
+    for(char of username) {
+        if((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9')
+         || char == '-' || char === '_') {
+
+         }
+         else return false; 
+    }
+    return true; 
+}
+
+function userNameUsed(allUsers, username) {
+    for(user of allUsers) {
+        if(user.username === username) return true; 
+    }
+    return false;
 }
 
 const connectionParams={
@@ -92,18 +105,23 @@ app.get('/user/newUser',(req,res) => {
     res.render('user/newUser');
 }); 
 
-app.post('/user/newUser',async (req,res) => {
+app.post('/user/newUser', async (req,res) => {
     const {name,password,username} = req.body; 
-    const hash = await bcrypt.hash(password,13);
-    const newUser = new User({
-        name: name, 
-        password : hash, 
-        username: username,
-    }); 
-    await newUser.save();
-    req.session.userId = newUser._id; 
-    res.locals.userId = newUser._id; 
-    res.redirect(`/user/${newUser.username}/userDetails`);
+    const allUsers = await User.find({});   
+    if(!validUsername(username)) res.send("The username must contain only letters, numbers, hyphens and underscores"); 
+    else if(userNameUsed(allUsers, username)) res.send("Userame already exist please take other username");  
+    else {
+        const hash = await bcrypt.hash(password,13);
+        const newUser = new User({
+            name: name, 
+            password : hash, 
+            username: username,
+        }); 
+        await newUser.save();
+        req.session.userId = newUser._id; 
+        res.locals.userId = newUser._id; 
+        res.redirect(`/user/${newUser.username}/userDetails`);
+    }
 });
 
 app.get('/user/login',(req,res) => {
