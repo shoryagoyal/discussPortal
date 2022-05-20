@@ -55,7 +55,9 @@
                     <a href = "/post/<%=post._id%>/edit" class = "btn btn-primary">Edit Post</a>
                 </div>
                 <div class = "col-sm-6 d-flex justify-content-center">
-                    <button class="btn btn-danger">Delete Post</button>
+                    <form action="/post/<%=post._id%>/delete?_method=DELETE" method="POST">
+                        <button class="btn btn-danger" type = "submit">Delete Post</button>
+                    </form>
                 </div>
             </div>
         <% } %>
@@ -81,7 +83,7 @@
                 <textarea name="commentContent" class = "form-control"  cols="15" rows="5" placeholder="Write your answer here" required></textarea>
             </div>
             <% if(!userId) { %>
-                <div id = "loginMessage" class = "mb-3">Please <a href="/user/login">Login</a> to answer the question</div>
+                <div id = "loginMessage" class = "mb-3">Please <a href="/user/login">Login</a> to post comment</div>
             <% } %> 
             <button type = "submit" class = "btn btn-warning mb-4">Post</button>
         </form>

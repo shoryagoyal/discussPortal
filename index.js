@@ -1,5 +1,9 @@
 // Mongo db start command :- "C:\Program Files\MongoDB\Server\5.0\bin\mongo.exe"
 
+
+// To-do 
+// 1) Implement delete feature 
+// 2) ; to introduce line break in text editor
 if(process.env.NODE_ENV !== "production"){
     require('dotenv').config();
 }
@@ -16,7 +20,7 @@ const expressSession = require('express-session');
 const methodOverride = require('method-override');
 const { Console } = require('console');
 const app = express();
-const dbUrl = process.env.DB_URL;// 'mongodb://localhost:27017/discussPortal'; //process.env.DB_URL;
+const dbUrl = 'mongodb://localhost:27017/discussPortal'; //process.env.DB_URL;
 const port = process.env.PORT || 3000;
 
 let errorMessage = false;
@@ -285,9 +289,31 @@ app.put('/post/:postId/edit',async (req,res) => {
         const post = await Post.findById(postId);
         post.title = title; 
         post.content = content; 
-        // res.send(post);
         await post.save();
         res.redirect(`/post/${postId}/postDetails`);
+    }
+}); 
+
+app.delete('/post/:postId/delete', async (req, res) => { 
+    if(!req.session.userId) res.send("please login first"); 
+    else {
+        const {postId} = req.params; 
+        const post =  await Post.findById(postId);
+        if(post.author != req.session.userId) res.send("Not the authorized user"); 
+        else {   
+            const author = await User.findById(req.session.userId);  
+            let index = 0;
+            for(posts of author.postsCreated) {
+                if(posts == postId) { 
+                    author.postsCreated.splice(index, 1); 
+                    break;
+                }
+                index++;
+            }
+            await author.save();
+            await Post.findByIdAndDelete(postId); 
+            res.redirect('/post/allPosts');
+        } 
     }
 });
 
