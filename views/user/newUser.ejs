@@ -1,5 +1,6 @@
 <%- include('../partials/mainHtmlPart1'); %>
 <!-- include your title and css files -->
+<link rel = "stylesheet" href="../../cssFiles/newUser.css"></link>
 <title>New user</title>
 </head>
 <body>
@@ -22,26 +23,37 @@
               </span>
           </div>
           <div class = "mb-4">
-               <span class = "formIcon">
-                   <i class="bi bi-person-circle"></i>
-               </span>
-               <span class = "inputSpan">
-                   <input type = "text" class = "formInput" placeholder = "username" name = "username" required>
-               </span>
+              <div class = "mb-2">
+                <span class = "formIcon">
+                    <i class="bi bi-person-circle"></i>
+                </span>
+                <span class = "inputSpan">
+                    <input type = "text" class = "formInput" placeholder = "username" name = "username" id = "username" required>
+                </span>
+              </div>
+              <div class = "usernameError">
+                  <p>The username must contain only letters, numbers, hyphens and underscores.</p>
+              </div>
           </div>
           <div class = "mb-5">
-               <span class = "formIcon">
-                   <i class="bi bi-lock-fill"></i>
-               </span>
-               <span class = "inputSpan">
-                   <input type = "password" class = "formInput" placeholder="Password" name = "password" required> 
-               </span>
+              <div>
+                  <span class = "formIcon">
+                     <i class="bi bi-lock-fill"></i>
+                  </span>
+                  <span class = "inputSpan">
+                     <input type = "password" class = "formInput" placeholder="Password" name = "password" id = "password" required> 
+                  </span>
+              </div>
+              <div>
+                  <p id = "passwordError">Password must be 8 characters or more, needs at least one number and one letter and should not contain spaces</p>
+              </div>
           </div>
           <div>
                <button type = "submit" id = "formSubmitButton">Sign up</button>
            </div>
       </form>
    </div>
+   <script src = "../../jsFiles/realTimeValidation.js"></script>
    <%- include('../partials/footer'); %>
    <%- include('../partials/jsFiles'); %>
 </body>

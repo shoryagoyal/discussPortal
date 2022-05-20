@@ -39,6 +39,18 @@ function validUsername(username) {
          else return false; 
     }
     return true; 
+} 
+
+function validatePassword(password) {
+    if(password.length < 8) return false; 
+    let containNumber = false, containLetter = false; 
+    for(char of password) {
+        if(char >= '0' && char <= '9') containNumber = true;
+        if((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) containLetter = true; 
+        if(char === ' ') return false;
+    }
+    if(!containNumber || !containLetter) return false; 
+    return true; 
 }
 
 function userNameUsed(allUsers, username) {
@@ -108,7 +120,8 @@ app.get('/user/newUser',(req,res) => {
 app.post('/user/newUser', async (req,res) => {
     const {name,password,username} = req.body; 
     const allUsers = await User.find({});   
-    if(!validUsername(username)) res.send("The username must contain only letters, numbers, hyphens and underscores"); 
+    if(!validUsername(username)) res.send("The username must contain only letters, numbers, hyphens and underscores");  
+    else if(!validatePassword(password)) res.send("Password must be 8 characters or more, needs at least one number and one letter and should not contain spaces");
     else if(userNameUsed(allUsers, username)) res.send("Userame already exist please take other username");  
     else {
         const hash = await bcrypt.hash(password,13);

@@ -1,0 +1,8 @@
+.usernameError {
+    display: none; 
+    color: rgb(231, 108, 108);
+}
+#passwordError {
+    display: none; 
+    color: rgb(231, 108, 108);
+}
